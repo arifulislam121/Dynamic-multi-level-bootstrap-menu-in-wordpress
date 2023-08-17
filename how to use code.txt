@@ -1,0 +1,54 @@
+1. Copy the wp-bootstrap-navwalker.php file from the github repo to the theme's root directory
+
+2. Add this style to your theme:
+
+
+.dropdown-submenu{position:relative;}
+.dropdown-submenu>.dropdown-menu{top:0;left:100%;-webkit-border-radius:0 6px 6px 6px;-moz-border-radius:0 6px 6px 6px;border-radius:0 6px 6px 6px;}
+.dropdown-submenu:active>.dropdown-menu, .dropdown-submenu:hover>.dropdown-menu {
+       display: block;
+       right:162px;
+}
+.dropdown-submenu>a:after{display:block;content:" ";float:right;width:0;height:0;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;border-left-color:#cccccc;margin-top:5px;margin-right:-10px;}
+.dropdown-submenu:active>a:after{border-left-color:#ffffff;}
+.dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
+
+
+
+
+
+(the red line is my modification to move the submenu pan to the left a little bit)
+
+
+3. Use the bootstrap.js file from the above github repo instead.
+
+
+4. Add these lines to functions.php to register the menu:
+
+
+<?php
+
+require_once('wp_bootstrap_navwalker.php');
+function register_my_menu() {
+ register_nav_menu('my-menu',__( 'My Menu' ));
+}
+add_action( 'init', 'register_my_menu' );
+
+?>
+
+5. Display the menu in your theme:
+
+<?php 
+ $menu_args = array(
+  'menu'    => 'my-menu',
+  'theme_location' => 'my-menu',
+  'depth'    => 4,
+  'container'   => false,
+  'menu_class'   => 'nav navbar-nav navbar-right',
+  'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
+  'walker'    => new wp_bootstrap_navwalker()
+ );
+ wp_nav_menu($menu_args);
+?>
+
+This is will add 4 level dropdown menu to your template.
